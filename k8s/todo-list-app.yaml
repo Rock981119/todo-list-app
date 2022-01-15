@@ -1,0 +1,39 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todo-list
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: todo-list
+  template:
+    metadata:
+      labels:
+        app: todo-list
+    spec:
+      containers:
+        - name: app
+          image: todo-list-app:1.0
+          ports:
+            - containerPort: 9001
+          imagePullPolicy: IfNotPresent
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: todo-list
+spec:
+  selector:
+    app: todo-list
+  type: NodePort
+  ports:
+  - name: port-out
+    port: 80
+    protocol: TCP
+    targetPort: 9001
+    nodePort: 32002
+
+  

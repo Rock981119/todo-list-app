@@ -1,0 +1,43 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name:  {{service}}
+  namespace: {{namespace}}
+  labels:
+    redeploy: {{version}}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app:  {{service}}
+  template:
+    metadata:
+      labels:
+        app:  {{service}}
+    spec:
+      containers:
+        - name: {{service}}
+          image:  {{image}}
+          ports:
+            - containerPort: 9001
+          imagePullPolicy: IfNotPresent
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name:  {{service}}
+  namespace: {{namespace}}
+spec:
+  selector:
+    app:  {{service}}
+  type: NodePort
+  ports:
+  - name: port-out
+    port: 80
+    protocol: TCP
+    targetPort: 9001
+    nodePort: 32002
+
+  
