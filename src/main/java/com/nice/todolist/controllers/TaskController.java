@@ -58,6 +58,15 @@ public class TaskController extends BaseController {
 		return taskService.getAllTasks();
 	}
 
+	@GetMapping(value = "/{id}")
+	public Task getByTaskId(@PathVariable("id") Long id) {
+		return taskService.findById(id);
+	}
+
+	@GetMapping(value="/notCompletedWithAssignedUsers")
+	public List<TaskAssignmentResponse> getNotCompletedTasksWithAssignedUsers() {
+		return taskAssignmentService.getNotCompletedTasksWithAssignedUsers();
+	}
 	
 	@PatchMapping(value="/{id}")
     public Task updateTask(@PathVariable("id") Long id, @RequestBody @Valid TaskDto updatedTaskDto) {
